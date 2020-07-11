@@ -1,0 +1,43 @@
+*_i.c
+*_p.c
+*.ilk
+*.meta
+*.obj
+*.pch
+*.pdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*.log
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.log
+*.scc
+
+[Dd]ebug/
+[Rr]elease/
+x64/
+build/
+[Bb]in/
+[Oo]bj/
+
+/[Ll]ibrary/
+
+# Unity3D Generated Meta Files
+*.pidb.meta
+*.pdb.meta
+
+# Unity3D Generated Crash Files
+sysinfo.txt
+
+# Builds
+*.apk
+*.unitypackage
