@@ -128,7 +128,7 @@ this.addText.onClick.AddListener(this.openURL);
 
     }
 private void openURL(){
-   Application.OpenURL("http://www.google.com");
+   Application.OpenURL("https://forms.gle/c93spyxRn11FTJim7");
 }
     // Update is called once per frame
     void Update()

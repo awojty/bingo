@@ -30,6 +30,8 @@ build/
 [Oo]bj/
 
 /[Ll]ibrary/
+Library
+Logs
 
 # Unity3D Generated Meta Files
 *.pidb.meta
