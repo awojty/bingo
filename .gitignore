@@ -32,7 +32,8 @@ build/
 /[Ll]ibrary/
 Library
 Logs
-
+Build
+Temp
 # Unity3D Generated Meta Files
 *.pidb.meta
 *.pdb.meta

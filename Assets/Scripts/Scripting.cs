@@ -5,12 +5,16 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 //using System.Windows.Media;
 public class Scripting : MonoBehaviour
 {
+
+  public GameObject startPanel;
 public Button restartButton;
+public Button startButton;
 public Button addText;
   public Button button1;
   public Button button2;
@@ -35,6 +39,11 @@ public Button button6;
   public List<string> buttonnames;
   public List<Button> buttons;
 
+  public Sprite myFirstImage;
+public Sprite mySecondImage;
+
+  public List<Button> clicked;
+
   public GameObject winPanel;
 
     public static Scripting instance = null;
@@ -45,11 +54,21 @@ public ColorBlock theColor;
     // Start is called before the first frame update
     void Start()
     {  //Dictionary<string, StorybookTinkerText> tinkerTextDic= new Dictionary<string, StorybookTinkerText>();
+      clicked= new List<Button>();
+
       if (this.winPanel!=null){
 
       this.winPanel.SetActive(false);
 
       }
+
+      if (this.startPanel!=null){
+
+      this.startPanel.SetActive(true);
+
+      }
+
+
 
       buttons= new List<Button>(){this.button1,this.button2,
         this.button3,this.button4,this.button5,this.button6,this.button7,this.button8,
@@ -88,9 +107,17 @@ public ColorBlock theColor;
 
 
       }
+      for(int i=0;i<16;i++){
+        this.buttons[i].gameObject.SetActive(false);
+      }
     //  Debug.Log("Game start");
 this.addText.onClick.AddListener(this.openURL);
     this.restartButton.onClick.AddListener(this.onrestart);
+
+    this.startButton.onClick.AddListener(this.startGame);
+
+
+
       this.button1.onClick.AddListener(this.onClick1);
       this.button1.interactable = true;
       this.button2.onClick.AddListener(this.onClick2);
@@ -132,33 +159,50 @@ private void openURL(){
 }
     // Update is called once per frame
     void Update()
-    {   handleTaskQueue();
+
+    {  coloring();
+
+
+
+      handleTaskQueue();
+
+     }
+
+     private void startGame(){
+       if (startPanel!=null){
+         Debug.Log("niotnull");
+     this.startPanel.SetActive(false);
+       }
+       for(int i=0;i<16;i++){
+         this.buttons[i].gameObject.SetActive(true);
+       }
 
      }
 private void onrestart(){
   Debug.Log("onrestr");
+  clicked = new List<Button>();
   for( int i=0;i<4;i++){
-
     List<int> rowcolumn =  new List<int>();
     List<int> rowcolumn2 =  new List<int>();
     rowClicked[i]=rowcolumn;
     columnClicked[i]=rowcolumn2;
+  }
 
+  foreach(Button button in this.buttons){
+  button.GetComponent<Image>().sprite = this.myFirstImage;
 
   }
+
+
   if (winPanel!=null){
     Debug.Log("niotnull");
 this.winPanel.SetActive(false);
   }
-  this.neww=0;
   for(int i=0;i<16;i++){
-    Button element = buttons[i];
-    var colors = element.GetComponent<Button> ().colors;
-            colors.normalColor = Color.white;
-            element.GetComponent<Button> ().colors = colors;
-
-
+    this.buttons[i].gameObject.SetActive(true);
   }
+  this.neww=0;
+
 
   // var colors = this.button1.GetComponent<Button> ().colors;
   //         colors.normalColor = Color.white;
@@ -177,12 +221,22 @@ this.winPanel.SetActive(false);
         // Tasks are added from other threads, usually in response to ROS msgs.
           if(isWin()){
              Debug.Log("Hello: " );
+             for(int i=0;i<16;i++){
+               this.buttons[i].gameObject.SetActive(false);
+             }
              if (winPanel!=null){
                bool isActive = this.winPanel.activeSelf;
              this.winPanel.SetActive(!isActive);
 
              }
         }
+    }
+
+    private void coloring(){
+      foreach(Button button in this.clicked){
+      button.GetComponent<Image>().sprite = this.mySecondImage;
+
+      }
     }
 
 public int neww=0;
@@ -202,6 +256,13 @@ Debug.Log("On Entering libary button clicked");
 }
 
     private void onClick1(){
+      this.clicked.Add(this.button1);
+      //Image image = GameObject.Find("button1").GetComponent<Image>();
+
+      //this.button1.GetComponent<Image>().sprite = this.mySecondImage;
+
+
+
       List<int> currentlist = this.row_column[0];
 
       string result11 = "bList row contents: ";
@@ -221,10 +282,10 @@ Debug.Log("On Entering libary button clicked");
 
       Debug.Log("Hello: click1 " );
 
-      var colors = this.button1.GetComponent<Button> ().colors;
-              colors.normalColor = Color.red;
-              this.button1.GetComponent<Button> ().colors = colors;
-
+      // var colors = this.button1.GetComponent<Button> ().colors;
+      //         colors.normalColor = Color.red;
+      //         this.button1.GetComponent<Button> ().colors = colors;
+      //
 
       this.rowClicked[currentlist[0]].Add(1);
       this.columnClicked[currentlist[1]].Add(1);
@@ -252,9 +313,10 @@ Debug.Log("On Entering libary button clicked");
     }
 
     private void onClick2(){
-      var colors = this.button2.GetComponent<Button> ().colors;
-              colors.normalColor = Color.red;
-              this.button2.GetComponent<Button> ().colors = colors;
+      this.clicked.Add(this.button2);
+      // var colors = this.button2.GetComponent<Button> ().colors;
+      //         colors.normalColor = Color.red;
+      //         this.button2.GetComponent<Button> ().colors = colors;
       Debug.Log("Hello: " );
 
     //  Debug.Log("onclick");
@@ -286,10 +348,9 @@ Debug.Log("On Entering libary button clicked");
 
 
     private void onClick3(){
+      this.clicked.Add(this.button3);
       Debug.Log("onclick");
-      var colors = this.button3.GetComponent<Button> ().colors;
-              colors.normalColor = Color.red;
-              this.button3.GetComponent<Button> ().colors = colors;
+
       List<int> currentlist = this.row_column[2];
       this.rowClicked[currentlist[0]].Add(3);
       this.columnClicked[currentlist[1]].Add(3);
@@ -303,10 +364,9 @@ Debug.Log("On Entering libary button clicked");
     }
 
     private void onClick4(){
+      this.clicked.Add(this.button4);
       Debug.Log("onclick");
-      var colors = this.button4.GetComponent<Button> ().colors;
-      colors.normalColor = Color.red;
-      this.button4.GetComponent<Button> ().colors = colors;
+
       List<int> currentlist = this.row_column[3];
       this.rowClicked[currentlist[0]].Add(4);
       this.columnClicked[currentlist[1]].Add(4);
@@ -321,9 +381,10 @@ Debug.Log("On Entering libary button clicked");
 
     private void onClick5(){
       Debug.Log("onclick");
-      var colors = this.button5.GetComponent<Button> ().colors;
-              colors.normalColor = Color.red;
-              this.button5.GetComponent<Button> ().colors = colors;
+          this.clicked.Add(this.button5);
+      // var colors = this.button5.GetComponent<Button> ().colors;
+      //         colors.normalColor = Color.red;
+      //         this.button5.GetComponent<Button> ().colors = colors;
       List<int> currentlist = this.row_column[4];
       this.rowClicked[currentlist[0]].Add(3);
       this.columnClicked[currentlist[1]].Add(3);
@@ -339,9 +400,10 @@ Debug.Log("On Entering libary button clicked");
 
     private void onClick6(){
       Debug.Log("onclick");
-      var colors = this.button6.GetComponent<Button> ().colors;
-              colors.normalColor = Color.red;
-              this.button6.GetComponent<Button> ().colors = colors;
+          this.clicked.Add(this.button6);
+      // var colors = this.button6.GetComponent<Button> ().colors;
+      //         colors.normalColor = Color.red;
+      //         this.button6.GetComponent<Button> ().colors = colors;
       List<int> currentlist = this.row_column[5];
       this.rowClicked[currentlist[0]].Add(3);
       this.columnClicked[currentlist[1]].Add(3);
@@ -359,9 +421,10 @@ Debug.Log("On Entering libary button clicked");
 
     private void onClick7(){
       Debug.Log("onclick");
-      var colors = this.button7.GetComponent<Button> ().colors;
-      colors.normalColor = Color.red;
-      this.button7.GetComponent<Button> ().colors = colors;
+      this.clicked.Add(this.button7);
+      // var colors = this.button7.GetComponent<Button> ().colors;
+      // colors.normalColor = Color.red;
+      // this.button7.GetComponent<Button> ().colors = colors;
       List<int> currentlist = this.row_column[6];
       this.rowClicked[currentlist[0]].Add(7);
       this.columnClicked[currentlist[1]].Add(7);
@@ -375,9 +438,10 @@ Debug.Log("On Entering libary button clicked");
 
     private void onClick8(){
       Debug.Log("onclick");
-      var colors = this.button8.GetComponent<Button> ().colors;
-              colors.normalColor = Color.red;
-              this.button8.GetComponent<Button> ().colors = colors;
+      this.clicked.Add(this.button8);
+      // var colors = this.button8.GetComponent<Button> ().colors;
+      //         colors.normalColor = Color.red;
+      //         this.button8.GetComponent<Button> ().colors = colors;
       List<int> currentlist = this.row_column[7];
       this.rowClicked[currentlist[0]].Add(3);
       this.columnClicked[currentlist[1]].Add(3);
@@ -393,9 +457,10 @@ Debug.Log("On Entering libary button clicked");
 
     public void onClick9(){
       Debug.Log("onclick");
-      var colors = this.button9.GetComponent<Button> ().colors;
-              colors.normalColor = Color.red;
-              this.button9.GetComponent<Button> ().colors = colors;
+      this.clicked.Add(this.button9);
+      // var colors = this.button9.GetComponent<Button> ().colors;
+      //         colors.normalColor = Color.red;
+      //         this.button9.GetComponent<Button> ().colors = colors;
       List<int> currentlist = this.row_column[8];
       this.rowClicked[currentlist[0]].Add(9);
       this.columnClicked[currentlist[1]].Add(9);
@@ -411,9 +476,10 @@ Debug.Log("On Entering libary button clicked");
 
     public void onClick10(){
       Debug.Log("onclick");
-      var colors = this.button10.GetComponent<Button> ().colors;
-              colors.normalColor = Color.red;
-              this.button10.GetComponent<Button> ().colors = colors;
+      this.clicked.Add(this.button10);
+      // var colors = this.button10.GetComponent<Button> ().colors;
+      //         colors.normalColor = Color.red;
+      //         this.button10.GetComponent<Button> ().colors = colors;
       List<int> currentlist = this.row_column[9];
       this.rowClicked[currentlist[0]].Add(10);
       this.columnClicked[currentlist[1]].Add(10);
@@ -446,9 +512,10 @@ Debug.Log("On Entering libary button clicked");
 
     public void onClick11(){
       Debug.Log("onclick");
-      var colors = this.button11.GetComponent<Button> ().colors;
-              colors.normalColor = Color.red;
-              this.button11.GetComponent<Button> ().colors = colors;
+      this.clicked.Add(this.button11);
+      // var colors = this.button11.GetComponent<Button> ().colors;
+      //         colors.normalColor = Color.red;
+      //         this.button11.GetComponent<Button> ().colors = colors;
       List<int> currentlist = this.row_column[10];
       this.rowClicked[currentlist[0]].Add(3);
       this.columnClicked[currentlist[1]].Add(3);
@@ -460,9 +527,10 @@ Debug.Log("On Entering libary button clicked");
 
       public void onClick12(){
         Debug.Log("onclick");
-        var colors = this.button12.GetComponent<Button> ().colors;
-                colors.normalColor = Color.red;
-                this.button12.GetComponent<Button> ().colors = colors;
+        this.clicked.Add(this.button12);
+        // var colors = this.button12.GetComponent<Button> ().colors;
+        //         colors.normalColor = Color.red;
+        //         this.button12.GetComponent<Button> ().colors = colors;
         List<int> currentlist = this.row_column[11];
         this.rowClicked[currentlist[0]].Add(3);
         this.columnClicked[currentlist[1]].Add(3);
@@ -473,10 +541,11 @@ Debug.Log("On Entering libary button clicked");
         }}
 
         public void onClick13(){
+          this.clicked.Add(this.button13);
           Debug.Log("onclick");
-          var colors = this.button13.GetComponent<Button> ().colors;
-                  colors.normalColor = Color.red;
-                  this.button13.GetComponent<Button> ().colors = colors;
+          // var colors = this.button13.GetComponent<Button> ().colors;
+          //         colors.normalColor = Color.red;
+          //         this.button13.GetComponent<Button> ().colors = colors;
           List<int> currentlist = this.row_column[12];
           this.rowClicked[currentlist[0]].Add(3);
           this.columnClicked[currentlist[1]].Add(3);
@@ -488,9 +557,10 @@ Debug.Log("On Entering libary button clicked");
 
           public void onClick14(){
             Debug.Log("onclick");
-            var colors = this.button14.GetComponent<Button> ().colors;
-            colors.normalColor = Color.red;
-            this.button14.GetComponent<Button> ().colors = colors;
+            this.clicked.Add(this.button14);
+            // var colors = this.button14.GetComponent<Button> ().colors;
+            // colors.normalColor = Color.red;
+            // this.button14.GetComponent<Button> ().colors = colors;
             List<int> currentlist = this.row_column[13];
             this.rowClicked[currentlist[0]].Add(14);
             this.columnClicked[currentlist[1]].Add(14);
@@ -502,9 +572,10 @@ Debug.Log("On Entering libary button clicked");
 
             public void onClick15(){
               Debug.Log("onclick");
-              var colors = this.button15.GetComponent<Button> ().colors;
-                      colors.normalColor = Color.red;
-                      this.button15.GetComponent<Button> ().colors = colors;
+              this.clicked.Add(this.button15);
+              // var colors = this.button15.GetComponent<Button> ().colors;
+              //         colors.normalColor = Color.red;
+              //         this.button15.GetComponent<Button> ().colors = colors;
               List<int> currentlist = this.row_column[14];
               this.rowClicked[currentlist[0]].Add(15);
               this.columnClicked[currentlist[1]].Add(15);
@@ -516,9 +587,10 @@ Debug.Log("On Entering libary button clicked");
 
               public void onClick16(){
                 Debug.Log("onclick");
-                var colors = this.button16.GetComponent<Button> ().colors;
-                        colors.normalColor = Color.red;
-                        this.button16.GetComponent<Button> ().colors = colors;
+                this.clicked.Add(this.button16);
+                // var colors = this.button16.GetComponent<Button> ().colors;
+                //         colors.normalColor = Color.red;
+                //         this.button16.GetComponent<Button> ().colors = colors;
                 List<int> currentlist = this.row_column[15];
                 this.rowClicked[currentlist[0]].Add(3);
                 this.columnClicked[currentlist[1]].Add(3);
